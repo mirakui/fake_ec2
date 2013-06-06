@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+require 'webrick'
+require 'webrick/httpproxy'
+require 'debugger'
+require 'zlib'
+
+handler = lambda do |req,res|
+  puts "< #{req.body}"
+  if res.header["content-encoding"] == "gzip"
+    body = nil
+    Zlib::GzipReader.wrap(StringIO.new(res.body)){|gz| body = gz.read }
+    fname = "log/#{Time.now.to_i}.xml"
+    open(fname, 'w') {|f| f.write body }
+    puts "> [#{fname}]"
+  end
+end
+
+proxy = WEBrick::HTTPProxyServer.new(
+  :Port => 8000,
+  :ProxyContentHandler => handler
+)
+
+trap(:INT) do
+  proxy.shutdown
+end
+
+proxy.start
