@@ -5,6 +5,7 @@ module FakeEc2
 
     def initialize
       @generated_ids = {}
+      @mutex = Mutex.new
     end
 
     def generate_8hex(prefix)
@@ -23,11 +24,13 @@ module FakeEc2
 
     private
       def generate_uniquely(key)
-        @generated_ids[key] ||= Set.new
-        begin
-          id = yield
-        end while @generated_ids[key].include?(id)
-        @generated_ids[key] = id
+        @mutex.synchronize do
+          @generated_ids[key] ||= Set.new
+          begin
+            id = yield
+          end while @generated_ids[key].include?(id)
+          @generated_ids[key] = id
+        end
       end
   end
 end
