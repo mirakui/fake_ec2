@@ -17,7 +17,7 @@ module FakeEc2
           next if i <= @counters[key]
           next if ip.to_s =~ /\.(0|255)$/
           @counters[key] = i
-          return ip
+          return ip.to_s
         end
         raise RuntimeError, "CIDR #{key} runs out"
       end

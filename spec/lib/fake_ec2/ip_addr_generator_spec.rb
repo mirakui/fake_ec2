@@ -12,6 +12,10 @@ describe FakeEc2::IpAddrGenerator do
       generator.generate('10.0.0.0/17').should == '10.0.0.3'
     end
 
+    specify do
+      generator.generate('10.0.0.0/17').should be_a(String)
+    end
+
     it 'do not generate invalid ip address like 10.0.0.255' do
       254.times do
         generator.generate('10.0.0.0/17')
