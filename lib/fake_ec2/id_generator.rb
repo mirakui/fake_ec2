@@ -4,8 +4,12 @@ module FakeEc2
     attr_reader :generated_ids
 
     def initialize
-      @generated_ids = {}
       @mutex = Mutex.new
+      reset!
+    end
+
+    def reset!
+      @generated_ids = {}
     end
 
     def generate_8hex(prefix)

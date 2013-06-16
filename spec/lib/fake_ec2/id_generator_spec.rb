@@ -3,6 +3,7 @@ require 'fake_ec2/id_generator'
 
 describe FakeEc2::IdGenerator do
   subject { described_class.new }
+  before { subject.reset! }
 
   describe '#generate_8hex' do
     specify do
@@ -11,8 +12,7 @@ describe FakeEc2::IdGenerator do
 
     it 'should generate unique ids' do
       ids = []
-      gen = described_class.new
-      100.times { ids << gen.generate_8hex('sg') }
+      100.times { ids << subject.generate_8hex('sg') }
       ids.uniq.length.should == 100
     end
   end
