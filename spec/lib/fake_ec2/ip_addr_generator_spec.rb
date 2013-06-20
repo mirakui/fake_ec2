@@ -3,7 +3,7 @@ require 'fake_ec2/ip_addr_generator'
 
 describe FakeEc2::IpAddrGenerator do
   let!(:generator) { FakeEc2::IpAddrGenerator.new }
-  before { generator.reset! }
+  before { generator.clear }
 
   describe '#generate' do
     specify do

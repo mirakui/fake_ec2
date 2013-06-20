@@ -8,10 +8,10 @@ module FakeEc2
 
     def initialize
       @mutex = Mutex.new
-      reset!
+      clear
     end
 
-    def reset!
+    def clear
       @counters = {}
     end
 

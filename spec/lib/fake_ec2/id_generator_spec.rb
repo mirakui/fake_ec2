@@ -3,7 +3,7 @@ require 'fake_ec2/id_generator'
 
 describe FakeEc2::IdGenerator do
   subject { described_class.new }
-  before { subject.reset! }
+  before { subject.clear }
 
   describe '#generate_8hex' do
     specify do
