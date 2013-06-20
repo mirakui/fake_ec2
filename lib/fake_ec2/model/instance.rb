@@ -6,9 +6,8 @@ module FakeEc2
     class Instance < Base
       field :reservation_id
       field :owner_id
-      field :group_set
 
-      field :instance_id, default: -> { FakeEc2.id_generator.generate_8hex('i') }
+      field :instance_id, default: -> { FakeEc2.space.id_generator.generate_8hex('i') }
       field :image_id
       field :instance_state, default: { code: 0, name: 'pending' }
       field :reason
@@ -21,10 +20,10 @@ module FakeEc2
       field :platform
       field :monitoring
       field :private_ip_address, default: -> {
-        FakeEc2.ip_addr_generator.generate('10.0.0.0/8')
+        FakeEc2.space.ip_addr_generator.generate('10.0.0.0/8')
       }
       field :ip_address, default: -> {
-        FakeEc2.ip_addr_generator.generate('192.0.2.0/24')
+        FakeEc2.space.ip_addr_generator.generate('192.0.2.0/24')
       }
       field :private_dns_name, default: ->(this) {
         "ip-#{this.private_ip_address.gsub('.', '-')}.ec2.internal"
@@ -38,9 +37,11 @@ module FakeEc2
       field :block_device_mapping
       field :virtualization_type, default: 'hvm'
       field :client_token
-      field :tag_set
       field :hypervisor, default: 'xen'
-      field :network_interface_set
+
+      field :security_groups
+      field :tags
+      field :network_interfaces
     end
   end
 end
