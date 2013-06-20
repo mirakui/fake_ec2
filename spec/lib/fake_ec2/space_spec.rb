@@ -6,4 +6,16 @@ describe FakeEc2::Space do
 
   its(:id_generator) { should be_a(FakeEc2::IdGenerator) }
   its(:ip_addr_generator) { should be_a(FakeEc2::IpAddrGenerator) }
+
+  describe 'serialization and deserialization' do
+    let(:space) { described_class.new }
+
+    subject do
+      space.id_generator
+      space.ip_addr_generator
+      space.dump
+    end
+
+    it { should be_a(String) }
+  end
 end

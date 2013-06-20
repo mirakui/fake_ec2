@@ -1,7 +1,10 @@
+require 'fake_ec2/serializable'
 require 'set'
+
 module FakeEc2
   class IdGenerator
-    attr_reader :generated_ids
+    include Serializable
+    serializable :generated_ids
 
     def initialize
       @mutex = Mutex.new

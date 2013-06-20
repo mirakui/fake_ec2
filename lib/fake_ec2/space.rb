@@ -13,5 +13,9 @@ module FakeEc2
     def ip_addr_generator
       @attributes[:ip_addr_generator] ||= FakeEc2::IpAddrGenerator.new
     end
+
+    def dump
+      Marshal.dump @attributes
+    end
   end
 end
