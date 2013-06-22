@@ -5,10 +5,34 @@ module FakeEc2
     class Base
       include Serializable
       serializable :fields
-      attr_reader :fields
 
       def initialize(params={})
         @fields = {}
+      end
+
+      def to_h
+        apply_defaults
+        @fields
+      end
+
+      def apply_defaults
+        self.class.field_config.each do |name, _|
+          @fields[name] ||= default_value(name)
+        end
+      end
+
+      def default_value(name)
+        default = self.class.field_config[name][:default]
+        if default.is_a?(Proc)
+          case default.arity
+          when 0
+            default.call
+          when 1
+            default.call(self)
+          end
+        else
+          default
+        end
       end
 
       class << self
@@ -26,19 +50,7 @@ end
           if options[:default]
             methods += <<-END
 def #{name}
-  @fields[:#{name}] ||= begin
-    default = self.class.field_config[:#{name}][:default]
-    if default.is_a?(Proc)
-      case default.arity
-      when 0
-        default.call
-      when 1
-        default.call(self)
-      end
-    else
-      default
-    end
-  end
+  @fields[:#{name}] || default_value(:#{name})
 end
             END
           else
