@@ -1,29 +1,42 @@
 # FakeEc2
 
-TODO: Write a gem description
+EC2 Mock for testing
 
 ## Installation
 
-Add this line to your application's Gemfile:
+```
+$ gem install fake_ec2
+```
 
-    gem 'fake_ec2'
+## Usage (standalone mode)
+### 1. Start server
 
-And then execute:
+```
+$ fake_ec2_server -p 4567
+```
 
-    $ bundle
+```ruby
+require 'aws-sdk'
 
-Or install it yourself as:
+ec2 = AWS::EC2.new(
+  access_key_id: 'AAA',
+  secret_access_key: 'BBB',
+  ec2_endpoint: '0.0.0.0:4567',
+  ec2_port: 80,
+  use_ssl: false
+)
 
-    $ gem install fake_ec2
+# RunInstances
+ec2.instances.create( count: 2, ... )
+)
+# => [<AWS::EC2::Instance id:i-e61c02eb>, <AWS::EC2::Instance id:i-aa463e98>]
 
-## Usage
+# DescribeInstances
+ec2.instances.to_a
+# => [<AWS::EC2::Instance id:i-e61c02eb>, <AWS::EC2::Instance id:i-aa463e98>]
 
-TODO: Write usage instructions here
+```
 
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+## Supported actions so far
+- RunInstances
+- DescribeInstances
