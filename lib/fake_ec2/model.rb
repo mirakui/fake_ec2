@@ -6,14 +6,15 @@ module FakeEc2
       include Serializable
       serializable :fields
 
-      def initialize(params={})
-        @fields = {}
+      def initialize(fields={})
+        @fields = fields
       end
 
       def to_h
         apply_defaults
         @fields
       end
+      alias_method :itemize, :to_h
 
       def apply_defaults
         self.class.field_config.each do |name, _|
@@ -33,6 +34,14 @@ module FakeEc2
         else
           default
         end
+      end
+
+      def itemize
+        hash = {}
+        to_h.each do |key, value|
+          hash[key] = value.respond_to?(:itemize) ? value.itemize : value
+        end
+        hash
       end
 
       class << self
@@ -61,6 +70,18 @@ end
             END
           end
           class_eval methods
+        end
+      end
+    end
+
+    class Set < Array
+      def initialize(items=[])
+        self.replace(items) if items
+      end
+
+      def itemize
+        map do |item|
+          { item: item.respond_to?(:itemize) ? item.itemize : item }
         end
       end
     end

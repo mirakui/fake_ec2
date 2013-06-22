@@ -7,15 +7,15 @@ module FakeEc2
     end
 
     def id_generator
-      @attributes[:id_generator] ||= FakeEc2::IdGenerator.new
+      @attributes[:id_generator] ||= IdGenerator.new
     end
 
     def ip_addr_generator
-      @attributes[:ip_addr_generator] ||= FakeEc2::IpAddrGenerator.new
+      @attributes[:ip_addr_generator] ||= IpAddrGenerator.new
     end
 
     def instances
-      @attributes[:instances] ||= []
+      @attributes[:instances] ||= Model::Set.new
     end
 
     def clear

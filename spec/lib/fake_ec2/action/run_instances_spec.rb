@@ -8,7 +8,7 @@ describe FakeEc2::Action::RunInstances do
   before { space.clear }
 
   describe '#run' do
-    subject! do
+    let!(:result) do
       action.run(
         image_id: 'ami-00000001',
         instance_type: 't1.micro',
@@ -18,13 +18,20 @@ describe FakeEc2::Action::RunInstances do
         max_count: 10
       )
     end
+    let(:instances) { space.instances }
+
+    subject { result }
 
     it { should be_a(Hash) }
     its([:request_id]) { should =~ /^[\w\-]+$/ }
     its([:instances_set]) { should be_a(Array) }
-    its([:instances_set]) { should have(10).instances }
+    its([:instances_set]) { should have(10).items }
+
     specify do
-      space.instances.should have(10).instances
+      subject[:instances_set].first[:item][:instance_state].should include(code: 0, name: 'pending')
     end
+
+    specify { instances.should have(10).instances }
+    specify { instances.first.instance_state.should include(code: 16, name: 'running') }
   end
 end
