@@ -12,9 +12,9 @@ module FakeEc2
       out.chomp
     end
 
-    def build(hash)
+    def build(obj)
       out = ''
-      hash.each do |tag, child|
+      obj.each do |tag, child|
         if tag.is_a?(Hash)
           tag, child = tag.first
         end

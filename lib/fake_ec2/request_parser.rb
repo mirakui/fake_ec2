@@ -1,10 +1,10 @@
 module FakeEc2
   class RequestParser
     class << self
-      def parse(params_text)
+      def parse(query_string)
         result = {}
-        params_text = params_text.sub(/^\?/, '')
-        params_text.split('&').each do |pair|
+        query_string = query_string.sub(/^\?/, '')
+        query_string.split('&').each do |pair|
           key, value = pair.split('=')
           parse_key_and_set_value(result, key, value)
         end
