@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+require 'sinatra'
+
+$: << File.expand_path('../../lib', __FILE__)
+require 'fake_ec2/request'
+
+post '/' do
+  form_vars = request.env['rack.request.form_vars']
+  req = FakeEc2::Request.from_query_string form_vars
+  req.run_action
+end
