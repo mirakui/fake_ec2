@@ -7,7 +7,9 @@ module FakeEc2
       def run(params)
         instances = Model::Set.new
         params[:max_count].to_i.times do |i|
-          instances << Model::Instance.new
+          instances << Model::Instance.new(
+            reservation_id: space.id_generator.generate_8hex('r')
+          )
         end
         space.instances.concat instances
         result = generate_result(
