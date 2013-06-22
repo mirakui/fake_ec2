@@ -2,6 +2,8 @@ require 'fake_ec2/serializable'
 
 module FakeEc2
   module Model
+    autoload :Instance, 'fake_ec2/model/instance'
+
     class Base
       include Serializable
       serializable :fields

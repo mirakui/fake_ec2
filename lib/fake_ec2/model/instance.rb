@@ -4,12 +4,21 @@ require 'fake_ec2/model'
 module FakeEc2
   module Model
     class Instance < Base
+      INSTANCE_STATES = {
+        pending:       { code: 0, name: 'pending' },
+        running:       { code: 16, name: 'running' },
+        shutting_down: { code: 32, name: 'shutting-down' },
+        terminated:    { code: 48, name: 'terminated' },
+        stopping:      { code: 64, name: 'stopping' },
+        stooped:       { code: 80, name: 'stopped' }
+      }
+
       field :reservation_id
       field :owner_id
 
       field :instance_id, default: -> { FakeEc2.space.id_generator.generate_8hex('i') }
       field :image_id
-      field :instance_state, default: { code: 0, name: 'pending' }
+      field :instance_state, default: INSTANCE_STATES[:pending]
       field :reason
       field :key_name
       field :ami_launch_index, default: 0
