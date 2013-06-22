@@ -10,12 +10,10 @@ module FakeEc2
           instances << Model::Instance.new
         end
         space.instances.concat instances
-        result = {
-          request_id: space.id_generator.generate_request_id,
-          owner_id: nil,
+        result = generate_result(
           group_set: nil,
           instances_set: instances.itemize
-        }
+        )
         instances.each do |instance|
           instance.instance_state = Model::Instance::INSTANCE_STATES[:running]
         end
