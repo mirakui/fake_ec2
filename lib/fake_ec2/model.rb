@@ -3,6 +3,7 @@ require 'fake_ec2/serializable'
 module FakeEc2
   module Model
     autoload :Instance, 'fake_ec2/model/instance'
+    autoload :Reservation, 'fake_ec2/model/reservation'
 
     class Base
       include Serializable
