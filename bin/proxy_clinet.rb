@@ -14,4 +14,12 @@ def ec2
   )
 end
 
-ec2.instances.to_a
+def sg(vpc_id, *names)
+  names = [names].flatten
+  ec2.security_groups.select {|s| s.vpc? && s.vpc.id == vpc_id && names.include?(s.name) }
+end
+
+
+if __FILE__ == $0
+  ec2.instances.to_a
+end
