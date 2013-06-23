@@ -8,7 +8,9 @@ A mock endpoint of Amazon EC2 for testing
 $ gem install fake_ec2
 ```
 
-## Usage (standalone mode)
+## Usage
+
+### Standalone
 ```
 $ fake_ec2_server -p 4567
 ```
@@ -30,6 +32,20 @@ ec2.instances.create( count: 2, ... )
 # => [<AWS::EC2::Instance id:i-e61c02eb>, <AWS::EC2::Instance id:i-aa463e98>]
 
 # DescribeInstances
+ec2.instances.to_a
+# => [<AWS::EC2::Instance id:i-e61c02eb>, <AWS::EC2::Instance id:i-aa463e98>]
+```
+
+### aws-sdk handler
+```ruby
+require 'aws-sdk'
+require 'fake_ec2'
+
+ec2 = AWS::EC2.new(
+  http_handler: FakeEc2::HttpHandler.new
+)
+
+ec2.instances.create( count: 2, ... )
 ec2.instances.to_a
 # => [<AWS::EC2::Instance id:i-e61c02eb>, <AWS::EC2::Instance id:i-aa463e98>]
 ```
