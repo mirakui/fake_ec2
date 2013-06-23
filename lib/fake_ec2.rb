@@ -5,6 +5,7 @@ module FakeEc2
   autoload 'IpAddrGenerator', 'fake_ec2/ip_addr_generator'
   autoload 'Space', 'fake_ec2/space'
   autoload 'Model', 'fake_ec2/model'
+  autoload 'HttpHandler', 'fake_ec2/http_handler'
 
   module_function
     def space

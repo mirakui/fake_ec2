@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'aws-sdk'
-require 'fake_ec2/http_handler'
+require 'fake_ec2'
 
 describe 'AWS::Ec2 handler' do
   let(:ec2) do
