@@ -1,3 +1,5 @@
+require 'fake_ec2/request'
+
 module FakeEc2
   class HttpHandler
     def handle(request, response, &read_block)
