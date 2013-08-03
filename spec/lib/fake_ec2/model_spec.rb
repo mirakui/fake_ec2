@@ -6,6 +6,7 @@ describe FakeEc2::Model do
     field :name, default: 'alice'
     field :age
     field :hello, default: proc { "My name is #{name}. I'm #{age} years old." }
+    field :random, default: proc { rand.to_s }, memoize: true
   end
 
   describe MyModel do
@@ -30,6 +31,10 @@ describe FakeEc2::Model do
           from("My name is alice. I'm 18 years old.").
           to("My name is alice. I'm 20 years old.")
       end
+    end
+
+    describe 'memoized fields' do
+      it { expect {}.not_to change { model.random } }
     end
   end
 

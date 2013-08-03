@@ -63,11 +63,19 @@ def #{name}=(obj)
 end
           END
           if options[:default]
-            methods += <<-END
+            if options[:memoize]
+              methods += <<-END
+def #{name}
+  @fields[:#{name}] ||= default_value(:#{name})
+end
+              END
+            else
+              methods += <<-END
 def #{name}
   @fields[:#{name}] || default_value(:#{name})
 end
-            END
+              END
+            end
           else
             methods += <<-END
 def #{name}
