@@ -53,3 +53,5 @@ ec2.instances.to_a
 ## Supported actions so far
 - RunInstances
 - DescribeInstances
+- CreateTags
+- DescribeTags
