@@ -50,7 +50,7 @@ ec2.instances.to_a
 # => [<AWS::EC2::Instance id:i-e61c02eb>, <AWS::EC2::Instance id:i-aa463e98>]
 ```
 
-## Supported actions so far
+## Supported actions
 - RunInstances
 - DescribeInstances
 - CreateTags
