@@ -20,18 +20,22 @@ describe FakeEc2::Action::DescribeInstances do
         instance_id:    'i-003',
         reservation_id: 'r-002'
       )
+      space.tags << FakeEc2::Model::Tag.new(
+        resource_id:    'i-001',
+        key:            'Key1',
+        value:          'Value1'
+      )
     end
-    subject { action.run({}) }
+    subject!(:result) { action.run({}) }
+    let(:instance1) { result[:reservation_set][0][:item][:instances_set][0][:item] }
+    let(:instance2) { result[:reservation_set][0][:item][:instances_set][1][:item] }
+    let(:instance3) { result[:reservation_set][1][:item][:instances_set][0][:item] }
 
-    its([:reservation_set]) { should have(2).reservations }
-    specify do
-      r1 = subject[:reservation_set][0][:item][:instances_set]
-      r1.should have(2).items
-      r1[0][:item][:instance_id].should == 'i-001'
-      r1[1][:item][:instance_id].should == 'i-002'
+    it { expect(instance1[:instance_id]).to eq('i-001') }
+    it { expect(instance2[:instance_id]).to eq('i-002') }
+    it { expect(instance3[:instance_id]).to eq('i-003') }
 
-      r2 = subject[:reservation_set][1][:item][:instances_set]
-      r2[0][:item][:instance_id].should == 'i-003'
-    end
+    it { expect(instance1[:tag_set][0][:item][:key]).to eq('Key1') }
+    it { expect(instance1[:tag_set][0][:item][:value]).to eq('Value1') }
   end
 end
