@@ -9,19 +9,26 @@ module FakeEc2
     class Base
       include Serializable
       serializable :fields
+      attr_reader :fields
+      protected :fields
 
       def initialize(fields={})
         @fields = fields
       end
 
+      def initialize_copy(other)
+        @fields = other.fields.dup
+      end
+
       def to_h
-        apply_defaults
-        @fields
+        clone = self.dup
+        clone.apply_defaults
+        clone.fields
       end
       alias_method :itemize, :to_h
 
       def apply_defaults
-        self.class.field_config.each do |name, _|
+        self.class.field_config.each do |name, options|
           @fields[name] ||= default_value(name)
         end
       end

@@ -9,7 +9,7 @@ describe FakeEc2::Model do
   end
 
   describe MyModel do
-    subject! do
+    subject!(:model) do
       MyModel.new.tap do |model|
         model.age = 18
       end
@@ -22,6 +22,14 @@ describe FakeEc2::Model do
         name:  'alice',
         age:   18
       )
+    end
+
+    describe '#to_h' do
+      it do
+        expect { model.age = 20 }.to change { model.to_h[:hello] }.
+          from("My name is alice. I'm 18 years old.").
+          to("My name is alice. I'm 20 years old.")
+      end
     end
   end
 
