@@ -49,64 +49,11 @@ module FakeEc2
       field :hypervisor, default: 'xen'
 
       field :security_groups
-      field :tags
       field :network_interfaces
+
+      field :tag_set, default: proc {
+        Model::Set.new FakeEc2.space.tags.select {|tag| tag.resource_id == instance_id }
+      }
     end
   end
 end
-__END__
-              <instanceId>i-2a2b3c4d</instanceId>
-              <imageId>ami-2a2b3c4d</imageId>
-              <instanceState>
-                <code>16</code>
-                <name>running</name>
-              </instanceState>
-              <privateDnsName>ip-10-251-50-35.ec2.internal</privateDnsName>
-              <dnsName>ec2-67-202-51-223.compute-1.amazonaws.com</dnsName>
-              <reason/>
-              <keyName>gsg-keypair</keyName>
-              <amiLaunchIndex>0</amiLaunchIndex>
-              <productCodes/>
-              <instanceType>t1.micro</instanceType>
-              <launchTime>YYYY-MM-DDTHH:MM:SS+0000</launchTime>
-              <placement>
-                <availabilityZone>us-west-2b</availabilityZone>
-                <groupName/>
-                <tenancy>default</tenancy>
-              </placement>
-              <platform>windows</platform>
-              <monitoring>
-                <state>disabled</state>
-              </monitoring>
-              <privateIpAddress>10.139.34.251</privateIpAddress>
-              <ipAddress>122.248.233.255</ipAddress>
-              <groupSet>
-                <item>
-                  <groupId>sg-2a2b3c4d</groupId>
-                  <groupName>my-security-group-2</groupName>
-                </item>
-              </groupSet>
-              <architecture>x86_64</architecture>
-              <rootDeviceType>ebs</rootDeviceType>
-              <rootDeviceName>/dev/sda1</rootDeviceName>
-              <blockDeviceMapping>
-                <item>
-                  <deviceName>/dev/sda1</deviceName>
-                  <ebs>
-                    <volumeId>vol-2a2b3c4d</volumeId>
-                    <status>attached</status>
-                    <attachTime>YYYY-MM-DDTHH:MM:SS.SSSZ</attachTime>
-                    <deleteOnTermination>true</deleteOnTermination>
-                  </ebs>
-                </item>
-              </blockDeviceMapping>
-              <virtualizationType>hvm</virtualizationType>
-              <clientToken>ABCDE1234567890123</clientToken>
-              <tagSet>
-                <item>
-                  <key>Name</key>
-                  <value>EC2 Instance</value>
-                </item>
-              </tagSet>
-              <hypervisor>xen</hypervisor>
-              <networkInterfaceSet/>
