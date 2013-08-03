@@ -20,11 +20,10 @@ module FakeEc2
       field :resource_id
       field :key
       field :value
-
-      def resource_type
+      field :resource_type, default: proc {
         prefix = resource_id.split('-').first
         RESOURCE_TYPE_PREFIXES[prefix]
-      end
+      }
     end
   end
 end

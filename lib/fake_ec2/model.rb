@@ -4,6 +4,7 @@ module FakeEc2
   module Model
     autoload :Instance, 'fake_ec2/model/instance'
     autoload :Reservation, 'fake_ec2/model/reservation'
+    autoload :Tag, 'fake_ec2/model/tag'
 
     class Base
       include Serializable
@@ -28,12 +29,7 @@ module FakeEc2
       def default_value(name)
         default = self.class.field_config[name][:default]
         if default.is_a?(Proc)
-          case default.arity
-          when 0
-            default.call
-          when 1
-            default.call(self)
-          end
+          self.instance_eval &default
         else
           default
         end

@@ -5,7 +5,7 @@ describe FakeEc2::Model do
   class MyModel < FakeEc2::Model::Base
     field :name, default: 'alice'
     field :age
-    field :hello, default: ->(this) { "My name is #{this.name}. I'm #{this.age} years old." }
+    field :hello, default: proc { "My name is #{name}. I'm #{age} years old." }
   end
 
   describe MyModel do
