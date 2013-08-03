@@ -2,8 +2,9 @@ require 'fake_ec2'
 
 module FakeEc2
   module Action
-    autoload :RunInstances, 'fake_ec2/action/run_instances'
+    autoload :CreateTags, 'fake_ec2/action/create_tags'
     autoload :DescribeInstances, 'fake_ec2/action/describe_instances'
+    autoload :RunInstances, 'fake_ec2/action/run_instances'
 
     class Base
       def space

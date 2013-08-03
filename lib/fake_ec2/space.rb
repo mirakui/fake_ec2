@@ -18,6 +18,10 @@ module FakeEc2
       @attributes[:instances] ||= Model::Set.new
     end
 
+    def tags
+      @attributes[:tags] ||= Model::Set.new
+    end
+
     def clear
       @attributes = {}
     end
