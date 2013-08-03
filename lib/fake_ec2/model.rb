@@ -14,6 +14,7 @@ module FakeEc2
 
       def initialize(fields={})
         @fields = fields
+        apply_defaults
       end
 
       def initialize_copy(other)
@@ -21,15 +22,25 @@ module FakeEc2
       end
 
       def to_h
-        clone = self.dup
-        clone.apply_defaults
-        clone.fields
+        hash = {}
+        self.class.field_config.each do |name, options|
+          hash[name] = if @fields[name]
+                         @fields[name]
+                       elsif options[:default]
+                         default_value(name)
+                       else
+                         nil
+                       end
+        end
+        hash
       end
       alias_method :itemize, :to_h
 
       def apply_defaults
         self.class.field_config.each do |name, options|
-          @fields[name] ||= default_value(name)
+          if !options[:default].is_a?(Proc) || options[:memoize]
+            @fields[name] ||= default_value(name)
+          end
         end
       end
 

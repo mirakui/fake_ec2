@@ -6,6 +6,7 @@ describe 'AWS::Ec2 handler' do
   let(:ec2) do
     AWS::EC2.new http_handler: FakeEc2::HttpHandler.new
   end
+  let(:space) { FakeEc2.space }
 
   before do
     FakeEc2.space.clear
@@ -19,16 +20,46 @@ describe 'AWS::Ec2 handler' do
   end
 
   describe 'Tags' do
-    before do
-      ec2.instances.create image_id: 'ami-001', count: 2
-      ec2.instances.each_with_index do |ins, i|
-        ins.tags.set 'Name' => "host#{i}", 'Role' => "role#{i}"
-      end
+    let(:instance1) do
+      ins = ec2.instances.create image_id: 'ami-001'
+      ins.tags.set 'Key1' => 'Value1', 'Key2' => 'Value2'
+      ins
+    end
+    let(:instance2) do
+      ins = ec2.instances.create image_id: 'ami-002'
+      ins.tags.set 'Key3' => 'Value3', 'Key4' => 'Value4'
+      ins
     end
 
-    it { expect(ec2.instances[0].tags['Name']).to eq('host0') }
-    it { expect(ec2.instances[0].tags['Role']).to eq('role0') }
-    it { expect(ec2.instances[1].tags['Name']).to eq('host1') }
-    it { expect(ec2.instances[1].tags['Role']).to eq('role1') }
+    it { expect(instance1.tags['Key1']).to eq('Value1') }
+    it { expect(instance1.tags['Key2']).to eq('Value2') }
+
+    context 'with DescribeTags' do
+      subject!(:result) do
+        ec2.client.describe_tags(
+          filters: [{ name: 'resource-id', values: [instance1.instance_id]}]
+        )
+      end
+
+      it { expect(result[:tag_set][0][:key]).to eq('Key1') }
+      it { expect(result[:tag_set][0][:value]).to eq('Value1') }
+      it { expect(result[:tag_set][1][:key]).to eq('Key2') }
+      it { expect(result[:tag_set][1][:value]).to eq('Value2') }
+    end
+
+    context 'with DescribeInstances' do
+      subject!(:result) do
+        ec2.client.describe_instances(
+          filters: [{ name: 'instance-id', values: [instance1.instance_id]}]
+        )
+      end
+      let(:instances_set) { result[:reservation_set][0][:instances_set] }
+      let(:tag_set) { instances_set[0][:tag_set] }
+
+      it { expect(tag_set[0][:key]).to eq('Key1') }
+      it { expect(tag_set[0][:value]).to eq('Value1') }
+      it { expect(tag_set[1][:key]).to eq('Key2') }
+      it { expect(tag_set[1][:value]).to eq('Value2') }
+    end
   end
 end
