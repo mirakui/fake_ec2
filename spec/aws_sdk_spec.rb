@@ -19,7 +19,7 @@ describe 'AWS::Ec2 handler' do
   end
 
   describe 'Tags' do
-    before do
+    before(:all) do
       ec2.instances.create image_id: 'ami-001', count: 2
       ec2.instances.each_with_index do |ins, i|
         ins.tags.set 'Name' => "host#{i}", 'Role' => "role#{i}"
