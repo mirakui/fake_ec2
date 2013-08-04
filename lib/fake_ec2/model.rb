@@ -109,6 +109,14 @@ end
           { item: item.respond_to?(:itemize) ? item.itemize : item }
         end
       end
+
+      def filter(&block)
+        result = Set.new
+        each do |item|
+          result << item if item.instance_eval(&block)
+        end
+        result
+      end
     end
   end
 end
