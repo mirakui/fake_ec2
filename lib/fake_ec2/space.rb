@@ -1,4 +1,5 @@
 require 'fake_ec2'
+require 'fake_ec2/model_set'
 
 module FakeEc2
   class Space
@@ -15,11 +16,11 @@ module FakeEc2
     end
 
     def instances
-      @attributes[:instances] ||= Model::Set.new
+      @attributes[:instances] ||= ModelSet.new
     end
 
     def tags
-      @attributes[:tags] ||= Model::Set.new
+      @attributes[:tags] ||= ModelSet.new
     end
 
     def clear

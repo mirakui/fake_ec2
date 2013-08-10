@@ -1,4 +1,5 @@
 require 'fake_ec2/model'
+require 'fake_ec2/model_set'
 require 'fake_ec2/action'
 
 module FakeEc2

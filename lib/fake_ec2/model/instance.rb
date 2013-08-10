@@ -1,5 +1,6 @@
 require 'fake_ec2'
 require 'fake_ec2/model'
+require 'fake_ec2/model_set'
 
 module FakeEc2
   module Model
@@ -62,7 +63,7 @@ module FakeEc2
       field :network_interfaces
 
       field :tag_set, default: proc {
-        Model::Set.new FakeEc2.space.tags.select {|tag| tag.resource_id == instance_id }
+        ModelSet.new FakeEc2.space.tags.select {|tag| tag.resource_id == instance_id }
       }
     end
   end

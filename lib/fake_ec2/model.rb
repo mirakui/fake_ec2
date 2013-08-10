@@ -98,25 +98,5 @@ end
         end
       end
     end
-
-    class Set < Array
-      def initialize(items=[])
-        self.replace(items) if items
-      end
-
-      def itemize
-        map do |item|
-          { item: item.respond_to?(:itemize) ? item.itemize : item }
-        end
-      end
-
-      def filter(&block)
-        result = Set.new
-        each do |item|
-          result << item if item.instance_eval(&block)
-        end
-        result
-      end
-    end
   end
 end

@@ -32,7 +32,7 @@ module FakeEc2
     private
       def generate_uniquely(key)
         @mutex.synchronize do
-          @generated_ids[key] ||= Set.new
+          @generated_ids[key] ||= ::Set.new
           begin
             id = yield
           end while @generated_ids[key].include?(id)

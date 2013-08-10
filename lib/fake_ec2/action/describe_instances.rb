@@ -13,12 +13,12 @@ module FakeEc2
 
       private
         def reservations
-          set = Model::Set.new
+          set = ModelSet.new
           space.instances.group_by(&:reservation_id).map do |r_id, instances|
             set << Model::Reservation.new(
               reservation_id: r_id,
               group_set: nil,
-              instances_set: Model::Set.new(instances)
+              instances_set: ModelSet.new(instances)
             )
           end
           set
