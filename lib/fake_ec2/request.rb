@@ -23,12 +23,9 @@ module FakeEc2
       Action.const_get action
     end
 
-    def action
-      @action ||= action_class.new
-    end
-
     def run_action
-      result = action.run(self.params)
+      action = action_class.new params
+      result = action.run
       root = { "#{params[:action].to_s}Result" => result }
       builder = XmlBuilder.new
       builder.build_root root, xmlns: RESPONSE_XMLNS

@@ -4,7 +4,7 @@ require 'fake_ec2/action'
 module FakeEc2
   module Action
     class CreateTags < Base
-      def run(params)
+      def run
         resource_ids = params[:resource_id]
         resource_ids.each do |resource_id|
           tags = params[:tag]

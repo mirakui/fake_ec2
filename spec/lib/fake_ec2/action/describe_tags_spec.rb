@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'fake_ec2/action'
 
 describe FakeEc2::Action::DescribeTags do
-  let(:action) { described_class.new }
   let(:space) { FakeEc2.space }
   before { space.clear }
 
@@ -19,7 +18,7 @@ describe FakeEc2::Action::DescribeTags do
         value: 'Value2'
       )
     end
-    subject(:result) { action.run({}) }
+    subject(:result) { described_class.new.run }
 
     its([:tag_set]) { should have(2).sets }
     it { expect(result[:tag_set][0][:item][:resource_id]).to eq('i-001') }

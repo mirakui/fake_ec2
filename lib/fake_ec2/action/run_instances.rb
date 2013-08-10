@@ -4,8 +4,8 @@ require 'fake_ec2/action'
 module FakeEc2
   module Action
     class RunInstances < Base
-      def run(params)
-        instances = Model::Set.new
+      def run
+        instances = ModelSet.new
         params[:max_count].to_i.times do |i|
           instances << Model::Instance.new(
             reservation_id: space.id_generator.generate_8hex('r')

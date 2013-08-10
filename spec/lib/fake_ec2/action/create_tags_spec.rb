@@ -3,19 +3,18 @@ require 'fake_ec2/action'
 require 'fake_ec2/model'
 
 describe FakeEc2::Action::CreateTags do
-  let(:action) { described_class.new }
   let(:space) { FakeEc2.space }
   before { space.clear }
 
   describe '#run' do
     subject!(:result) do
-      action.run(
+      described_class.new(
         resource_id: %w(ami-001 i-001),
         tag: [
           { key: 'Key1', value: 'Value1' },
           { key: 'Key2', value: 'Value2' }
         ]
-      )
+      ).run
     end
 
     it { expect(result[:return]).to eq('true') }

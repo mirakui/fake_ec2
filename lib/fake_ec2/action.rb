@@ -8,8 +8,18 @@ module FakeEc2
     autoload :RunInstances, 'fake_ec2/action/run_instances'
 
     class Base
+      attr_reader :params
+
       def space
         FakeEc2.space
+      end
+
+      def initialize(params={})
+        @params = params
+      end
+
+      def run
+        raise NotImplementError
       end
 
       def generate_result(hash)

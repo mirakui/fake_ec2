@@ -12,7 +12,6 @@ describe FakeEc2::Request do
     subject { request }
 
     its(:action_class) { should == FakeEc2::Action::RunInstances }
-    its(:action) { should be_an_instance_of FakeEc2::Action::RunInstances }
 
     describe '#run_action' do
       subject { request.run_action }

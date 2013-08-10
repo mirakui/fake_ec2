@@ -2,21 +2,20 @@ require 'spec_helper'
 require 'fake_ec2/action'
 
 describe FakeEc2::Action::RunInstances do
-  let(:action) { described_class.new }
   let(:space) { FakeEc2.space }
 
   before { space.clear }
 
   describe '#run' do
     let!(:result) do
-      action.run(
+      described_class.new(
         image_id: 'ami-00000001',
         instance_type: 't1.micro',
         key_name: 'my_key',
         security_groups: [],
         min_count: 1,
         max_count: 10
-      )
+      ).run
     end
     let(:instances) { space.instances }
 
