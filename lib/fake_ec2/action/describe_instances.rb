@@ -34,6 +34,8 @@ module FakeEc2
       filter('tag-value') do |v|
         !!tag_set.find {|tag| tag.value == v }
       end
+      # TODO tag:key filter has not been implemented yet
+      # http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeInstances.html
 
       def run
         if params[:instance_id]
