@@ -17,7 +17,7 @@ module FakeEc2
         placement-group-name platform private-dns-name private-ip-address product-code product-code.type
         ramdisk-id reason requester-id reservation-id root-device-name root-device-type
         source-dest-check spot-instance-request-id state-reason-code state-reason-message subnet-id
-        tag-key tag-value tag:key virtualization-type vpc-id hypervisor
+        virtualization-type vpc-id hypervisor
         network-interface.description network-interface.subnet-id network-interface.vpc-id network-interface.network-interface.id
         network-interface.owner-id network-interface.availability-zone network-interface.requester-id network-interface.requester-managed
         network-interface.status network-interface.mac-address network-interface-private-dns-name network-interface.source-destination-check
@@ -27,6 +27,13 @@ module FakeEc2
         network-interface.addresses.primary network-interface.addresses.association.public-ip network-interface.addresses.association.ip-owner-id
         association.public-ip association.ip-owner-id association.allocation-id association.association-id
       ]
+
+      filter('tag-key') do |v|
+        !!tag_set.find {|tag| tag.key == v }
+      end
+      filter('tag-value') do |v|
+        !!tag_set.find {|tag| tag.value == v }
+      end
 
       def run
         if params[:instance_id]

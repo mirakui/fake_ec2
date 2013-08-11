@@ -39,22 +39,37 @@ describe FakeEc2::Action::Filterable do
     set
   end
 
-  context 'run with filtering (1)' do
-    let(:params) do
-      {
-        filter: [
-          {name: 'place', value: ['Tokyo', 'Osaka']},
-          {name: 'gender', value: ['female']}
-        ]
-      }
-    end
+  describe '#run with filtering' do
     let(:action) do
       DescribeA.new params, set
     end
     subject!(:result) do
       action.run
     end
-    it { expect(result[:result_set]).to have(1).item }
-    it { expect(result[:result_set][0][:item][:name]).to eq('Alice') }
+
+    context '(1)' do
+      let(:params) do
+        {
+          filter: [
+            { name: 'place', value: ['Tokyo', 'Osaka'] },
+            { name: 'gender', value: ['female'] }
+          ]
+        }
+      end
+      it { expect(result[:result_set]).to have(1).item }
+      it { expect(result[:result_set][0][:item][:name]).to eq('Alice') }
+    end
+
+    context '(2)' do
+      let(:params) do
+        {
+          filter: [
+            { name: 'years-old', value: [22] }
+          ]
+        }
+      end
+      it { expect(result[:result_set]).to have(1).item }
+      it { expect(result[:result_set][0][:item][:name]).to eq('Bob') }
+    end
   end
 end

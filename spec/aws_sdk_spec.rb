@@ -20,12 +20,12 @@ describe 'AWS::Ec2 handler' do
   end
 
   describe 'Tags' do
-    let(:instance1) do
+    let!(:instance1) do
       ins = ec2.instances.create image_id: 'ami-001'
       ins.tags.set 'Key1' => 'Value1', 'Key2' => 'Value2'
       ins
     end
-    let(:instance2) do
+    let!(:instance2) do
       ins = ec2.instances.create image_id: 'ami-002'
       ins.tags.set 'Key3' => 'Value3', 'Key4' => 'Value4'
       ins
@@ -60,6 +60,30 @@ describe 'AWS::Ec2 handler' do
       it { expect(tag_set[0][:value]).to eq('Value1') }
       it { expect(tag_set[1][:key]).to eq('Key2') }
       it { expect(tag_set[1][:value]).to eq('Value2') }
+    end
+
+    context 'filtering with Tags (1)' do
+      subject!(:result) do
+        ec2.instances.tagged('Key2').tagged_values('Value2')
+      end
+
+      it { expect(result.count).to eq(1) }
+      it { expect(result.to_a[0].tags['Key1']).to eq('Value1') }
+      it { expect(result.to_a[0].id).to eq(instance1.id) }
+    end
+
+    context 'filtering with Tags (2)' do
+      pending '"tag:key" filter has not been implemented yet' do
+        subject!(:result) do
+          ec2.client.describe_instances(
+            filters: [{ name: 'tag:Key2', values: ['Value2'] }]
+          )
+        end
+
+        it { expect(result.count).to eq(1) }
+        it { expect(result.to_a[0].tags['Key1']).to eq('Value1') }
+        it { expect(result.to_a[0].id).to eq(instance1.id) }
+      end
     end
   end
 end
