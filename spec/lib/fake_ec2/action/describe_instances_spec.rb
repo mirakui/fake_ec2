@@ -63,6 +63,6 @@ describe FakeEc2::Action::DescribeInstances do
     it { expect(reservation_set).to have(1).item }
     it { expect(instances_set).to have(2).items }
     it { expect(instances_set[0][:item][:instance_id]).to eq('i-001') }
-    it { expect(instances_set[1][:item][:instance_id]).to eq('i-001') }
+    it { expect(instances_set[1][:item][:instance_id]).to eq('i-002') }
   end
 end

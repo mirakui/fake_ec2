@@ -61,6 +61,20 @@ module FakeEc2
         hash
       end
 
+      def pass?(value, &block)
+        bind_proc(&block).call value
+      end
+
+      def bind_proc(&block)
+        name = '__bind_proc__'
+        self.class.class_eval do
+          define_method(name, &block)
+          method = instance_method(name)
+          remove_method(name)
+          method
+        end.bind(self)
+      end
+
       class << self
         attr_reader :field_config
 

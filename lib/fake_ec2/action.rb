@@ -1,4 +1,5 @@
 require 'fake_ec2'
+require 'fake_ec2/model_set'
 
 module FakeEc2
   module Action
@@ -36,30 +37,17 @@ module FakeEc2
       end
 
       def filter(set)
-      end
-
-      def generate_filter(filter_params)
-        filter_action_class = self.class
-        proc do |action|
-          filter_passed = true
-          filter_action_class.filter_procs.each do |name, block|
-            filter_param = filter_params.find {|param| param[:name] == name }
-            next if !filter_param || !filter_param[:value]
-            filter_param[:value].each do |value|
-              any_values_passed = false
-              #binding.pry
-              #self.instance_eval do
-              #  any_values_passed = true if block.call(value)
-              #end
-              #self.instance_eval(&(block.curry(2)[value]))
-              self.pass?(name, &block)
-              filter_passed = false unless any_values_passed
-              break unless filter_passed
-            end
-            break unless filter_passed
-          end
-          filter_passed
+        return set unless params[:filter]
+        self.class.filter_procs.each do |name, block|
+          filter_param = params[:filter].find {|param| param[:name] == name }
+          next if !filter_param || !filter_param[:value]
+          set = ModelSet.new(
+            filter_param[:value].map {|value|
+              set.filter {|model| model.pass? value, &block }
+            }.flatten.uniq
+          )
         end
+        set
       end
 
       module ClassMethods
