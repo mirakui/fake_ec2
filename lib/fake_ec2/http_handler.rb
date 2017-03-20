@@ -1,22 +1,18 @@
+require 'seahorse'
 require 'fake_ec2/request'
 
 module FakeEc2
-  class HttpHandler
-    def handle(request, response, &read_block)
-      fake_request = fake_request request
-      body = fake_request.run_action
-      if block_given?
-        body.each_line do |line|
-          read_block.call line
-        end
-      else
-        response.body = body
+  class SeahorsePlugin < Seahorse::Client::Plugin
+    class Handler < Seahorse::Client::Handler
+      def call(context)
+        fake_request = Request.from_param_list context.http_request.body.param_list
+        response_body = fake_request.run_action
+        resp = Seahorse::Client::Http::Response.new status_code: 200, body: response_body
+        context.http_response = resp
+        res = Seahorse::Client::Response.new context: context
       end
     end
 
-    private
-      def fake_request(http_request)
-        Request.from_query_string http_request.body
-      end
+    handler(Handler)
   end
 end

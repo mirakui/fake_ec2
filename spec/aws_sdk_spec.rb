@@ -1,10 +1,13 @@
 require 'spec_helper'
-require 'aws-sdk-v1'
+require 'aws-sdk'
 require 'fake_ec2'
+require 'fake_ec2/http_handler'
 
-describe 'AWS::Ec2 handler' do
-  let(:ec2) do
-    AWS::EC2.new http_handler: FakeEc2::HttpHandler.new
+describe 'Aws::EC2 handler' do
+  let!(:client) do
+    Aws::EC2::Client.new.tap do |client|
+      client.handlers.add FakeEc2::SeahorsePlugin::Handler
+    end
   end
   let(:space) { FakeEc2.space }
 
@@ -13,19 +16,23 @@ describe 'AWS::Ec2 handler' do
   end
 
   describe 'RunInstances and DescribeInstances' do
-    before { ec2.instances.create image_id: 'ami-001', count: 2 }
-    it { expect(ec2.instances.count).to eq 2 }
+    it do
+      client.run_instances image_id: 'ami-001', min_count: 2, max_count: 2
+      expect(client.describe_instances.instances.count).to eq 2
+    end
   end
 
   describe 'Tags' do
     let!(:instance1) do
-      ins = ec2.instances.create image_id: 'ami-001'
-      ins.tags.set 'Key1' => 'Value1', 'Key2' => 'Value2'
+      res = client.run_instances image_id: 'ami-001', min_count: 1, max_count: 1
+      ins = res.reservations[0].instances[0]
+      client.create_tags resources: [ins.instance_id], tags: [{ key: 'Key1', value: 'Value1' }, { key: 'Key2', value: 'Value2' }]
       ins
     end
     let!(:instance2) do
-      ins = ec2.instances.create image_id: 'ami-002'
-      ins.tags.set 'Key3' => 'Value3', 'Key4' => 'Value4'
+      res = client.instances.create image_id: 'ami-002', min_count: 1, max_count: 1
+      ins = res.reservations[0].instances[0]
+      client.create_tags resources: [ins.instance_id], tags: [{ key: 'Key3', value: 'Value3' }, { key: 'Key4', value: 'Value4' }]
       ins
     end
 
@@ -34,9 +41,9 @@ describe 'AWS::Ec2 handler' do
 
     context 'with DescribeTags' do
       subject!(:result) do
-        ec2.client.describe_tags(
+        client.describe_tags(
           filters: [{ name: 'resource-id', values: [instance1.instance_id]}]
-        )
+        ).reservations[0]
       end
 
       it { expect(result[:tag_set][0][:key]).to eq 'Key1' }
@@ -47,7 +54,7 @@ describe 'AWS::Ec2 handler' do
 
     context 'with DescribeInstances' do
       subject!(:result) do
-        ec2.client.describe_instances(
+        client.describe_instances(
           filters: [{ name: 'instance-id', values: [instance1.instance_id]}]
         )
       end

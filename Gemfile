@@ -6,4 +6,4 @@ gemspec
 gem 'pry-byebug'
 gem 'rspec', '~> 3.5'
 gem 'guard-rspec'
-gem 'aws-sdk-v1'
+gem 'aws-sdk', '~> 2'

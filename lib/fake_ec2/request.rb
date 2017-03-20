@@ -15,6 +15,16 @@ module FakeEc2
       new RequestParser.parse(query_string)
     end
 
+    def self.from_param_list(param_list)
+      params = Hash[
+        param_list.map do |x|
+          name = x.name.gsub(/([a-z\d])([A-Z])/,'\1_\2').downcase.to_sym
+          [name, x.value]
+        end
+      ]
+      new params
+    end
+
     def action_class
       action = params[:action]
       if action !~ /^[A-Z][a-zA-Z]*$/ || !Action.const_defined?(action)
