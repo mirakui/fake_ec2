@@ -23,7 +23,7 @@ describe FakeEc2::IpAddrGenerator do
       expect(generator.generate('10.0.0.0/31')).to eq '10.0.0.1'
       expect {
         generator.generate('10.0.0.0/31')
-      }.to raise_error
+      }.to raise_error RuntimeError
     end
   end
 end
