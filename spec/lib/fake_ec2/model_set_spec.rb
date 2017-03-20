@@ -10,7 +10,7 @@ describe FakeEc2::ModelSet do
     field :random, default: proc { rand.to_s }, memoize: true
   end
 
-  subject!(:set) do
+  subject(:set) do
     FakeEc2::ModelSet.new.tap do |set|
       set << MyModel.new(name: 'Alice', age: 18)
       set << MyModel.new(name: 'Bob',   age: 19)
@@ -18,16 +18,20 @@ describe FakeEc2::ModelSet do
     end
   end
 
-  it { subject.length.should == 3 }
-  specify { subject.select {|model| model.age >= 19 }.length.should == 2 }
-  specify { subject.itemize.first[:item].should be_a(Hash) }
+  it { expect(subject.length).to eq 3 }
+  it do
+    expect(subject.select {|model| model.age >= 19 }.length).to eq 2
+  end
+  it do
+    expect(subject.itemize.first[:item]).to be_a Hash
+  end
 
   describe '#filter' do
-    subject!(:filtered_result) do
+    subject(:filtered_result) do
       set.filter { age == 19 }
     end
 
-    it { subject.length.should == 1 }
-    it { expect(filtered_result.first.name).to eq('Bob') }
+    it { expect(filtered_result.length).to eq 1 }
+    it { expect(filtered_result.first.name).to eq 'Bob' }
   end
 end

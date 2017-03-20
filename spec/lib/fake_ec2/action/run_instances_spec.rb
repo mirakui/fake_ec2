@@ -21,21 +21,21 @@ describe FakeEc2::Action::RunInstances do
 
     subject { result }
 
-    it { should be_a(Hash) }
-    it { subject[:request_id].should =~ /\A[\w\-]+\z/ }
-    it { subject[:instances_set].should be_a(Array) }
-    it { subject[:instances_set].length.should == 10 }
+    it { is_expected.to be_a Hash }
+    it { expect(subject[:request_id]).to match /\A[\w\-]+\z/ }
+    it { expect(subject[:instances_set]).to be_a Array }
+    it { expect(subject[:instances_set].length).to eq 10 }
 
-    specify do
-      subject[:instances_set].first[:item][:instance_state].should include(code: 0, name: 'pending')
+    it do
+      expect(subject[:instances_set].first[:item][:instance_state]).to match(code: 0, name: 'pending')
     end
 
-    specify { instances.length.should == 10 }
+    it { expect(instances.length).to eq 10 }
 
-    describe 'a instance' do
+    describe 'an instance' do
       subject { instances.first }
-      it { subject.instance_state.should include(code: 16, name: 'running') }
-      it { subject.reservation_id.should =~ /\Ar-\w+\z/ }
+      it { expect(subject.instance_state).to match(code: 16, name: 'running') }
+      it { expect(subject.reservation_id).to match /\Ar-\w+\z/ }
     end
   end
 end

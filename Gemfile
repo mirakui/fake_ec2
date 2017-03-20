@@ -4,6 +4,6 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'pry-byebug'
-gem 'rspec'
+gem 'rspec', '~> 3.5'
 gem 'guard-rspec'
 gem 'aws-sdk-v1'

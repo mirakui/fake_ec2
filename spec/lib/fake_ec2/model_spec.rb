@@ -16,9 +16,9 @@ describe FakeEc2::Model do
       end
     end
 
-    it { subject.hello.should == "My name is alice. I'm 18 years old." }
-    it { subject.name.should == 'alice' }
-    it { subject.age.should == 18 }
+    it { expect(subject.hello).to eq "My name is alice. I'm 18 years old." }
+    it { expect(subject.name).to eq 'alice' }
+    it { expect(subject.age).to eq 18 }
 
     describe '#to_h' do
       it do

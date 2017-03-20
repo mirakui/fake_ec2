@@ -4,7 +4,7 @@ require 'fake_ec2/http_handler'
 describe FakeEc2::HttpHandler do
   let!(:handler) do
     described_class.new.tap do |h|
-      h.stub(:fake_request) do
+      allow(h).to receive(:fake_request) do
         double run_action: "multiple\nline\nbody"
       end
     end
@@ -18,19 +18,19 @@ describe FakeEc2::HttpHandler do
   end
 
   describe '#handle with block' do
-    specify do
+    it do
       body = ''
       handler.handle(request, response) do |str|
         body += str
       end
-      body.should == "multiple\nline\nbody"
+      expect(body).to eq "multiple\nline\nbody"
     end
   end
 
   describe '#handle without block' do
-    specify do
-      handler.handle(request, response).should == "multiple\nline\nbody"
-      response.body.should == "multiple\nline\nbody"
+    it do
+      expect(handler.handle(request, response)).to eq "multiple\nline\nbody"
+      expect(response.body).to eq "multiple\nline\nbody"
     end
   end
 end
