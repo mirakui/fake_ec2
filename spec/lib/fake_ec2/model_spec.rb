@@ -16,14 +16,9 @@ describe FakeEc2::Model do
       end
     end
 
-    its(:hello) { should == "My name is alice. I'm 18 years old." }
-    its(:to_h) do
-      should include(
-        hello: "My name is alice. I'm 18 years old.",
-        name:  'alice',
-        age:   18
-      )
-    end
+    it { subject.hello.should == "My name is alice. I'm 18 years old." }
+    it { subject.name.should == 'alice' }
+    it { subject.age.should == 18 }
 
     describe '#to_h' do
       it do

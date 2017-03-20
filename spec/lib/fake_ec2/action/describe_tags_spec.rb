@@ -20,7 +20,7 @@ describe FakeEc2::Action::DescribeTags do
     end
     subject(:result) { described_class.new.run }
 
-    its([:tag_set]) { should have(2).sets }
+    it { subject[:tag_set].length.should == 2 }
     it { expect(result[:tag_set][0][:item][:resource_id]).to eq('i-001') }
     it { expect(result[:tag_set][0][:item][:key]).to eq('Key1') }
     it { expect(result[:tag_set][0][:item][:value]).to eq('Value1') }

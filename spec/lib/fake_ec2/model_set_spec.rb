@@ -18,8 +18,8 @@ describe FakeEc2::ModelSet do
     end
   end
 
-  it { should have(3).items }
-  specify { subject.select {|model| model.age >= 19 }.should have(2).items }
+  it { subject.length.should == 3 }
+  specify { subject.select {|model| model.age >= 19 }.length.should == 2 }
   specify { subject.itemize.first[:item].should be_a(Hash) }
 
   describe '#filter' do
@@ -27,7 +27,7 @@ describe FakeEc2::ModelSet do
       set.filter { age == 19 }
     end
 
-    its(:length) { should == 1 }
+    it { subject.length.should == 1 }
     it { expect(filtered_result.first.name).to eq('Bob') }
   end
 end

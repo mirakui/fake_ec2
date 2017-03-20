@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'aws-sdk'
+require 'aws-sdk-v1'
 require 'fake_ec2'
 
 describe 'AWS::Ec2 handler' do
@@ -15,7 +15,7 @@ describe 'AWS::Ec2 handler' do
   describe 'RunInstances and DescribeInstances' do
     specify do
       ec2.instances.create image_id: 'ami-001', count: 2
-      ec2.instances.to_a.should have(2).instances
+      ec2.instances.count.should == 2
     end
   end
 

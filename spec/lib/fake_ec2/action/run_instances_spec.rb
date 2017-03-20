@@ -22,20 +22,20 @@ describe FakeEc2::Action::RunInstances do
     subject { result }
 
     it { should be_a(Hash) }
-    its([:request_id]) { should =~ /\A[\w\-]+\z/ }
-    its([:instances_set]) { should be_a(Array) }
-    its([:instances_set]) { should have(10).items }
+    it { subject[:request_id].should =~ /\A[\w\-]+\z/ }
+    it { subject[:instances_set].should be_a(Array) }
+    it { subject[:instances_set].length.should == 10 }
 
     specify do
       subject[:instances_set].first[:item][:instance_state].should include(code: 0, name: 'pending')
     end
 
-    specify { instances.should have(10).instances }
+    specify { instances.length.should == 10 }
 
     describe 'a instance' do
       subject { instances.first }
-      its(:instance_state) { should include(code: 16, name: 'running') }
-      its(:reservation_id) { should =~ /\Ar-\w+\z/ }
+      it { subject.instance_state.should include(code: 16, name: 'running') }
+      it { subject.reservation_id.should =~ /\Ar-\w+\z/ }
     end
   end
 end

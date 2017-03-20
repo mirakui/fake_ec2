@@ -56,7 +56,7 @@ describe FakeEc2::Action::Filterable do
           ]
         }
       end
-      it { expect(result[:result_set]).to have(1).item }
+      it { expect(result[:result_set].length).to eq 1 }
       it { expect(result[:result_set][0][:item][:name]).to eq('Alice') }
     end
 
@@ -68,7 +68,7 @@ describe FakeEc2::Action::Filterable do
           ]
         }
       end
-      it { expect(result[:result_set]).to have(1).item }
+      it { expect(result[:result_set].length).to eq 1 }
       it { expect(result[:result_set][0][:item][:name]).to eq('Bob') }
     end
   end

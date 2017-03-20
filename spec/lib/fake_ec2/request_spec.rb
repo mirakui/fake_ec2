@@ -11,14 +11,14 @@ describe FakeEc2::Request do
     end
     subject { request }
 
-    its(:action_class) { should == FakeEc2::Action::RunInstances }
+    it { subject.action_class.should == FakeEc2::Action::RunInstances }
 
     describe '#run_action' do
       subject { request.run_action }
 
       it { should =~ /\A#{Regexp.escape('<?xml version="1.0" encoding="UTF-8"?>')}/ }
       it { should =~ %r(^<RunInstancesResult xmlns="http://ec2\.amazonaws\.com/doc/2013-02-01/">.*</RunInstancesResult>)m }
-      specify { subject.scan(%r(<instanceId>i-[0-9a-f]{8}</instanceId>)).should have(3).matches }
+      specify { subject.scan(%r(<instanceId>i-[0-9a-f]{8}</instanceId>)).length.should == 3 }
     end
   end
 end

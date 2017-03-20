@@ -18,10 +18,9 @@ describe FakeEc2::Action::CreateTags do
     end
 
     it { expect(result[:return]).to eq('true') }
-    it { expect(space.tags).to have(4).items }
+    it { expect(space.tags.length).to eq 4 }
     it { expect(space.tags.first.resource_id).to eq('ami-001') }
     it { expect(space.tags.first.key).to eq('Key1') }
     it { expect(space.tags.first.value).to eq('Value1') }
   end
 end
-

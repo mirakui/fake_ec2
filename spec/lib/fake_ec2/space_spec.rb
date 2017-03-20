@@ -4,8 +4,8 @@ require 'fake_ec2/space'
 describe FakeEc2::Space do
   subject { described_class.new }
 
-  its(:id_generator) { should be_a(FakeEc2::IdGenerator) }
-  its(:ip_addr_generator) { should be_a(FakeEc2::IpAddrGenerator) }
+  it { subject.id_generator.should be_a(FakeEc2::IdGenerator) }
+  it { subject.ip_addr_generator.should be_a(FakeEc2::IpAddrGenerator) }
 
   describe 'serialization and deserialization' do
     let(:space) { described_class.new }
