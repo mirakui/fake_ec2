@@ -4,7 +4,7 @@ require 'fake_ec2/http_handler'
 describe FakeEc2::HttpHandler do
   let!(:handler) do
     described_class.new.tap do |h|
-      h.stub(:fake_request) do
+      allow(h).to receive(:fake_request) do
         double run_action: "multiple\nline\nbody"
       end
     end
