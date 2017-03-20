@@ -19,6 +19,6 @@ describe FakeEc2::Serializable do
       clone = Marshal.load(dump)
     }.not_to raise_error
 
-    clone.attr.should == 'value1'
+    expect(clone.attr).to eq 'value1'
   end
 end

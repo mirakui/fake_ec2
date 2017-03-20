@@ -26,7 +26,7 @@ describe FakeEc2::XmlBuilder do
 
     subject { described_class.new.build_root hash, xmlns: 'http://ec2.amazonaws.com/doc/2013-02-01/' }
 
-    it { should == <<-END.chomp }
+    it { is_expected.to eq <<-END.chomp }
 <?xml version="1.0" encoding="UTF-8"?>
 <RunInstancesResponse xmlns="http://ec2.amazonaws.com/doc/2013-02-01/">
     <requestId>1234</requestId>

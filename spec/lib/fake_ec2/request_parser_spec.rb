@@ -22,8 +22,9 @@ describe FakeEc2::RequestParser do
       ].join
     end
 
-    it { should ==
-      { :action => "RunInstances",
+    it do
+      is_expected.to match(
+        :action => "RunInstances",
         :image_id => "ami-beb0caec",
         :instance_type => "m1.large",
         :max_count => "1",
@@ -37,8 +38,8 @@ describe FakeEc2::RequestParser do
           ],
           :subnet_id => "subnet-a61dafcf"}
         ]
-      }
-    }
+      )
+    end
   end
 
   describe '#parse CreateTags' do
@@ -54,15 +55,15 @@ describe FakeEc2::RequestParser do
       ].join
     end
 
-    it { should ==
-      {
+    it do
+      is_expected.to match(
         action: 'CreateTags',
         resource_id: %w[i-0123 ami-0123],
         tag: [
           { key: 'Name', value: 'host0'},
           { key: 'Role', value: 'role0'}
         ]
-      }
-    }
+      )
+    end
   end
 end
