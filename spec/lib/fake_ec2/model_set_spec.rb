@@ -28,6 +28,6 @@ describe FakeEc2::ModelSet do
     end
 
     it { subject.length.should == 1 }
-    it { expect(filtered_result.first.name).to eq('Bob') }
+    it { expect(filtered_result.first.name).to eq 'Bob' }
   end
 end

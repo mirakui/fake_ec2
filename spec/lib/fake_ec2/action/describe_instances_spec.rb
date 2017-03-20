@@ -31,12 +31,12 @@ describe FakeEc2::Action::DescribeInstances do
     let(:instance2) { result[:reservation_set][0][:item][:instances_set][1][:item] }
     let(:instance3) { result[:reservation_set][1][:item][:instances_set][0][:item] }
 
-    it { expect(instance1[:instance_id]).to eq('i-001') }
-    it { expect(instance2[:instance_id]).to eq('i-002') }
-    it { expect(instance3[:instance_id]).to eq('i-003') }
+    it { expect(instance1[:instance_id]).to eq 'i-001' }
+    it { expect(instance2[:instance_id]).to eq 'i-002' }
+    it { expect(instance3[:instance_id]).to eq 'i-003' }
 
-    it { expect(instance1[:tag_set][0][:item][:key]).to eq('Key1') }
-    it { expect(instance1[:tag_set][0][:item][:value]).to eq('Value1') }
+    it { expect(instance1[:tag_set][0][:item][:key]).to eq 'Key1' }
+    it { expect(instance1[:tag_set][0][:item][:value]).to eq 'Value1' }
   end
 
   describe 'InsntanceId.n' do
@@ -62,7 +62,7 @@ describe FakeEc2::Action::DescribeInstances do
     let(:instances_set) { reservation_set[0][:item][:instances_set] }
     it { expect(reservation_set.length).to eq 1 }
     it { expect(instances_set.length).to eq 2 }
-    it { expect(instances_set[0][:item][:instance_id]).to eq('i-001') }
-    it { expect(instances_set[1][:item][:instance_id]).to eq('i-002') }
+    it { expect(instances_set[0][:item][:instance_id]).to eq 'i-001' }
+    it { expect(instances_set[1][:item][:instance_id]).to eq 'i-002' }
   end
 end
